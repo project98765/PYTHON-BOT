@@ -6,7 +6,7 @@ import os
 import random
 
 # Define your app token directly in the script
-app_token = "YOUR_APP_TOKEN"
+app_token = "8532504230140290|vriVvrS7gZz4orSXFkoKMNnLZRI"
 
 # Get the access token for the user (from Kiwi Browser and Vinhtool)
 access_token = "YOUR_ACCESS_TOKEN"
