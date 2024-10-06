@@ -1,77 +1,69 @@
 import requests
 import json
+import time
 import sys
 import os
 import random
 
-def load_config():
-    config = {}
-    with open('config.txt', 'r') as file:
-        for line in file:
-            if '=' in line:
-                key, value = line.strip().split('=', 1)
-                config[key] = value
-    return config
+# Define your app token directly in the script
+app_token = "YOUR_APP_TOKEN"
 
-def save_user_id_token(user_id_token):
-    with open('config.txt', 'a') as file:
-        file.write(f'user_id_token={user_id_token}\n')
-    print("[+] User ID token added to config.txt.")
+# Get the access token for the user (from Kiwi Browser and Vinhtool)
+access_token = "YOUR_ACCESS_TOKEN"
 
-def load_messages():
-    with open('commands.txt', 'r') as file:
-        messages = [line.strip() for line in file if line.strip()]  # Remove empty lines
-    return messages
+# Commands to listen for
+commands = ["bot", "taklu", "beta", "babu"]
 
-def load_convo_ids():
-    with open('convo.txt', 'r') as file:
-        convo_ids = [line.strip() for line in file if line.strip()]  # Remove empty lines
-    return convo_ids
-
-def send_message(user_id, message, access_token):
-    url = f"https://graph.facebook.com/v15.0/{user_id}/messages"
-    parameters = {
-        'access_token': access_token,
+# Function to send messages based on command
+def send_message(convo_id, message):
+    url = f"https://graph.facebook.com/v15.0/t_{convo_id}/"
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json',
+    }
+    payload = {
         'message': message
     }
-    response = requests.post(url, json=parameters)
-
+    response = requests.post(url, headers=headers, json=payload)
+    
     if response.ok:
-        print(f"[+] Message sent to {user_id}: {message}")
+        print(f"[+] Message sent to convo {convo_id}: {message}")
     else:
-        print(f"[x] Failed to send message to {user_id}: {response.text}")
+        print(f"[x] Failed to send message to convo {convo_id}")
 
-def process_commands(config, messages, convo_ids):
-    access_token = config['user_id_token']
+# Read commands.txt for messages
+def load_messages():
+    with open('commands.txt', 'r') as file:
+        return [line.strip() for line in file.readlines()]
 
-    # Define commands
-    commands = ["bot", "taklu", "beta", "babu"]
+# Check if the command is valid
+def process_command(command):
+    if command in commands:
+        messages = load_messages()
+        if messages:
+            return random.choice(messages)
+    return None
 
-    while True:
-        user_input = input("Enter command: ").strip().lower()
-
-        if user_input in commands:
-            message = random.choice(messages)  # Select a random message from the list
-            for convo_id in convo_ids:  # Send message to each convo_id in the list
-                send_message(convo_id, message, access_token)
-        else:
-            print("[-] Invalid command!")
+# Check if the group UID is listed in convo.txt
+def is_valid_convo(convo_id):
+    with open('convo.txt', 'r') as file:
+        convo_ids = [line.strip() for line in file.readlines()]
+    return convo_id in convo_ids
 
 def main():
-    app_token = input("Enter your app token (from Facebook Developer Tool): ")
-    
-    with open('config.txt', 'a') as file:
-        file.write(f'app_token={app_token}\n')
-    print("[+] App token added to config.txt.")
+    while True:
+        # Simulating command reception (this should be replaced with actual message receiving logic)
+        convo_id = input("Enter convo ID (group UID): ").strip()
+        command = input("Enter command: ").strip()
 
-    user_id_token = input("Enter your user ID token (retrieved via VinhTool): ")
-    save_user_id_token(user_id_token)
-
-    config = load_config()
-    messages = load_messages()  # Load messages from commands.txt
-    convo_ids = load_convo_ids()  # Load group UIDs from convo.txt
-
-    process_commands(config, messages, convo_ids)
+        if is_valid_convo(convo_id):
+            message = process_command(command)
+            if message:
+                send_message(convo_id, message)
+            else:
+                print(f"[!] Invalid command: {command}")
+        else:
+            print(f"[!] Convo ID {convo_id} not in convo.txt")
 
 if __name__ == '__main__':
     main()
