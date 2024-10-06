@@ -9,7 +9,7 @@ import random
 app_token = "8532504230140290|vriVvrS7gZz4orSXFkoKMNnLZRI"
 
 # Get the access token for the user (from Kiwi Browser and Vinhtool)
-access_token = "YOUR_ACCESS_TOKEN"
+access_token = "EAABwzLixnjYBO24hWdpDqkuYHp7HSDWwgYk5ZBg66rZBIaNKrlklRdFZAWXslvWx7qkYpMqZCdnOAsibhr8US1oUre967BEsNSgygKDMMyZCZCaZBfICcBwxWCbFNpLPAKtCZAgFCyoEOGoDDBXrCS7QZB2bnsTrXLFpRcJLWONIFb2vqsZCN3N6ZBQV1szuZBJAT2n1JnmydDmgA0rqr4ZAAZBsaN"
 
 # Commands to listen for
 commands = ["bot", "taklu", "beta", "babu"]
