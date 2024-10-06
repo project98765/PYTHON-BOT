@@ -1,1 +1,5 @@
-
+{
+    "hello": "Hi there! How can I assist you today?",
+    "help": "Here are some commands you can use: hello, help.",
+    "bye": "Goodbye! Have a great day!"
+}
