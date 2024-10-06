@@ -4,8 +4,8 @@ import json
 
 app = Flask(__name__)
 
-# Facebook Page Access Token (replace with your token)
-ACCESS_TOKEN = 'YOUR_FACEBOOK_PAGE_ACCESS_TOKEN'  # Facebook Page Access Token
+# Facebook App Access Token (replace with your token)
+ACCESS_TOKEN = 'YOUR_APP_ACCESS_TOKEN'  # Replace with your App Access Token
 
 # Load configuration from config.json
 def load_config():
